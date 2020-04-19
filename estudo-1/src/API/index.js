@@ -51,6 +51,13 @@ router.post('/clientes', (req, res) => {
     execSQLQuery(`INSERT INTO clientes(Nome, CPF) VALUES('${nome}','${hash}')`, res);
 });
 
+//Atualizando um cliente
+router.patch('/clientes/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const nome = req.body.nome.substring(0, 150);
+    const cpf = req.body.cpf.substring(0, 11);
+    execSQLQuery(`UPDATE clientes SET Nome='${nome}', CPF='${cpf}' WHERE ID=${id}`, res);
+})
 
 
 
