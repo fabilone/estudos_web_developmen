@@ -5,6 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const port = 3000; //porta padrão
 const mysql = require('mysql');
+const bcrypt = require('bcryptjs');
 
 //configurando o body parser para pegar POSTS mais tarde
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,7 +45,10 @@ router.delete('/clientes/:id', (req, res) =>{
 router.post('/clientes', (req, res) => {
     const nome = req.body.nome.substring(0, 150);
     const cpf = req.body.cpf.substring(0, 11);
-    execSQLQuery(`INSERT INTO clientes(Nome, CPF) VALUES('${nome}','${cpf}')`, res);
+    //criptografia
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(cpf, salt);
+    execSQLQuery(`INSERT INTO clientes(Nome, CPF) VALUES('${nome}','${hash}')`, res);
 });
 
 
