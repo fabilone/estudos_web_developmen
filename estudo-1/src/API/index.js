@@ -18,6 +18,31 @@ app.use('/', router);
 app.listen(port);
 console.log('API funcionando!');
 
+//defindo rotas para os clientes
+/*
+router.get('/clientes', (req, res) => {
+    execSQLQuery('SELECT * FROM clientes', res);
+})*/
+
+//definindo rota para apenas um usuário
+router.get('/clientes/:id?', (req, res) => {
+    let filter = '';
+    if (req.params.id) filter = ' WHERE ID=' + parseInt(req.params.id);
+    execSQLQuery('SELECT * FROM clientes' + filter, res);
+})
+
+
+//Excluindo um cliente
+
+router.delete('/clientes/:id', (req, res) =>{
+    execSQLQuery('DELETE FROM clientes WHERE ID=' + parseInt(req.params.id), res);
+})
+
+//Adicionando um cliente
+
+
+
+
 
 
 
