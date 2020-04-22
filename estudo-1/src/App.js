@@ -2,6 +2,13 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+//função para pegar os dados de routes.js em formato json
+function teste(){
+  fetch('http://seuip:3000/users')
+    .then(response => response.json())
+    .then(users => console.warn(users))
+}
+
 function App() {
   return (
     <div className="App">
