@@ -60,10 +60,6 @@ router.patch('/clientes/:id', (req, res) => {
 })
 
 
-
-
-
-
 function execSQLQuery(sqlQry, res) {
     const connection = mysql.createConnection({
         host: 'localhost',
