@@ -14,4 +14,4 @@ Segunda alternativa:
 O arquivo routes.js irá gerenciar nossas requisições POST e GET, que utilizaremos pra puxar ou inserir dados no nosso banco de dados. Será nesse arquivo também que faremos a conexão com o banco.
 
 Terceira alternativa:
-Datalhamento de cada uma das operações do CRUD.
+Datalhamento de cada uma das operações do CRUD usando MySQL.
