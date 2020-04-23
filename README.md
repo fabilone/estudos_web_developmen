@@ -12,3 +12,6 @@ No diretório API encontra-se o arquivo index.js que funciona como uma pequena A
 
 Segunda alternativa:
 O arquivo routes.js irá gerenciar nossas requisições POST e GET, que utilizaremos pra puxar ou inserir dados no nosso banco de dados. Será nesse arquivo também que faremos a conexão com o banco.
+
+Terceira alternativa:
+Datalhamento de cada uma das operações do CRUD.
