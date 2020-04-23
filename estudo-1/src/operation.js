@@ -25,11 +25,15 @@ app.listen(3000, () => {
 });
 
 // Criando uma rota GET que retorna os dados da tabela usuários.
-app.get('/users', (res, req) => {
+app.get('/users', (req, res) => {
 
     // Executando a query MySQL (selecionar todos os dados da tabela usuário).
         mysqlConnection.query('SELECT * FROM clientes', (err, rows, fields) => {
-            if(!err) console.log(rows);
+            if(!err){
+                // Pegando a 'resposta' do servidor pra nossa requisição. Ou seja, aqui ele vai mandar nossos dados.
+                console.log(rows);
+                res.send(rows);
+            }
             // Caso ocorra algum erro, não irá executar corretamente.if (error) throw error;
             else console.log(err);
 
