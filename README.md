@@ -15,3 +15,12 @@ O arquivo routes2.js irá gerenciar nossas requisições POST e GET, que utiliza
 
 Terceira alternativa:
 Datalhamento de cada uma das operações do CRUD usando MySQL.
+
+Estudo 2 - Criando uma API NodeJS + MySQL
+
+Criação de uma API de integração NodeJS com MySQL.
+
+Instalações:
+npm install --save express
+
+
