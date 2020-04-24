@@ -4,6 +4,8 @@ import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 import Selecao from './API_OP/selecao';
+import Cabecalho from './components/header/header';
+import Routes from './routes';
 
 //função para pegar os dados de routes.js em formato json
 function teste(){
@@ -20,10 +22,9 @@ function App() {
       <div className="App">
         <header className="App-header bg-secondary">
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
         </header>
+        
+        <Cabecalho />
 
         <div className="container-fluid">
           <div className="accordion" id="accordionExample">
@@ -32,6 +33,7 @@ function App() {
                 <h5 className="mb-0">
                   <button className="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                     Seleção
+                    <Routes />
                   </button>
                 </h5>
               </div>
