@@ -11,8 +11,13 @@ router.get('/', (req, res, next) =>{
 
 //INSERE UM USUÁRIO
 router.post('/', (req, res, next) => {
+    const usuario = {
+        nome: req.body.nome,
+        email: req.body.email
+    };
     res.status(201).send({
-        mensagem: 'Usando o POST dentro da rota usuário'
+        mensagem: 'Usando o POST dentro da rota usuário',
+        usuarioCriado: usuario
     });
 });
 
