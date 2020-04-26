@@ -13,4 +13,11 @@ router.post('/', (req, res, next) => {
     });
 });
 
+router.get('/:id_usuario', (req, res, next) => {
+    res.status(201).send({
+        mensagem: 'Usando o GET dentro da rota usuário. Buscando usuário especifico'
+    });
+});
+
+
 module.exports = router;
