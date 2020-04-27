@@ -6,10 +6,13 @@ const mysql = require('../mysql').pool;
 //RETORNA TODOS OS USUÁRIOS
 router.get('/', (req, res, next) =>{
     /*
+    //Primeiro Teste
     res.status(200).send({
         mensagem: 'Usando o GET dentro da rota usuário'
     });
     */
+   /*
+   //Segundo Teste
    mysql.getConnection((error, conn) =>{
        conn.query(
            'SELECT * FROM clientes;',
@@ -18,16 +21,47 @@ router.get('/', (req, res, next) =>{
                return res.status(200).send({response: resultado})
            }
        )
-   });
+   });*/
+
+    //Terceiro Teste
+    mysql.getConnection((error, conn) => {
+        conn.query(
+            'SELECT * FROM clientes;',
+            (error, resultado, field) => {
+                if (error) { return res.status(500).send({ error: error }) }
+                //Detalhamento da requisição
+                const response = {
+                    quantidade: resultado.length,
+                    usuario: resultado.map( user => {
+                        return {
+                            id_usuario: user.ID,
+                            nome: user.Nome,
+                            cpf: user.CPF,
+                            request:{
+                                tipo: 'GET',
+                                descricao: 'Retorna todos os usuarios',
+                                url: 'http://localhost:3000/usuarios/'+ user.ID
+                            }
+                        }
+                    })
+                }
+                return res.status(200).send(response);
+            }
+        )
+    });
 });
 
 //INSERE UM USUÁRIO
 router.post('/', (req, res, next) => {
+
+    //Primeiro Teste
     /*const usuario = {
         nome: req.body.nome,
         email: req.body.email
     };*/
 
+    /*
+    //Segundo Teste
     //INSERINDO UM USUÁRIO NO BANCO
     mysql.getConnection((error, conn) =>{
         if(error){ return res.status(500).send({ error: error })}
@@ -49,6 +83,40 @@ router.post('/', (req, res, next) => {
             }
             )
     });
+    */
+
+    //Terceiro Teste
+    //INSERINDO UM USUÁRIO NO BANCO
+    mysql.getConnection((error, conn) => {
+        if (error) { return res.status(500).send({ error: error }) }
+        conn.query(
+            'INSERT INTO clientes (Nome, CPF) VALUES (?,?)',
+            [req.body.nome, req.body.cpf],
+            (error, resultado, field) => {
+                conn.release();
+                if (error) {
+                    return res.status(500).send({
+                        error: error,
+                        response: null
+                    });
+                }
+                const response = {
+                    mensagem: 'Usuario inserido com sucesso!',
+                    usuario: {
+                        id_usuario: resultado.ID,
+                        nome: resultado.Nome,
+                        cpf: resultado.CPF,
+                        request:{
+                            tipo: 'GET',
+                            descriacao: 'Insere um usuario',
+                            url: 'http://localhost:3000/usuarios'
+                        }
+                    }
+                }
+                return res.status(201).send(response);
+            }
+        )
+    });
     
 });
 
@@ -57,7 +125,7 @@ router.get('/:id_usuario', (req, res, next) => {
     const id = req.params.id_usuario;
 
     /*
-
+    //Primeiro Teste
     if(id === 'especial'){
         res.status(201).send({
             mensagem: 'Você encontrou o Id especial',
@@ -69,6 +137,9 @@ router.get('/:id_usuario', (req, res, next) => {
             mensagem:  'você passou um Id'
         });
     }*/
+
+    /*
+    //Segundo Teste
     mysql.getConnection((error, conn) =>{
         if(error){ return res.status(500).send({ error: error })}
         conn.query(
@@ -81,15 +152,53 @@ router.get('/:id_usuario', (req, res, next) => {
 
         )
     });
+
+    */
+    //Terceiro Teste
+    mysql.getConnection((error, conn) =>{
+        if(error){ return res.status(500).send({ error: error })}
+        conn.query(
+            'SELECT * FROM clientes WHERE ID = ?;',
+            [req.params.id_usuario],
+            (error, resultado, fields) => {
+                if(error) { return res.status(500).send({ error: error })}
+
+                if(resultado.length == 0 ){
+                    return res.status(404).send({
+                        mensagem: 'Não foi encontrado usuario na base de dados'
+                    })
+                }
+
+                const response = {
+                    usuario:{
+                        id_usuario: resultado[0].ID,
+                        nome: resultado[0].Nome,
+                        cpf: resultado[0].CPF,
+                        request:{
+                            tipo: 'GET',
+                            descriacao: 'Retorna um usuario',
+                            url: 'http://localhost:3000/usuarios/'+ resultado[0].ID
+                        }
+                    }
+                }
+                return res.status(200).send(response);
+            }
+
+        )
+    });
 });
 
 //FAZENDO UM PATCH
 router.patch('/', (req, res, next) => {
-    /*res.status(201).send({
+
+    /*
+    //Primeiro Teste
+    res.status(201).send({
         mensagem: 'Usando o PATCH dentro da rota de usuário'
     })*/
 
-
+    /*
+    //Segundo Teste
     mysql.getConnection((error, conn) => {
         if (error) { return res.status(500).send({ error: error }) }
         conn.query(
@@ -109,15 +218,54 @@ router.patch('/', (req, res, next) => {
             }
         )
     });
+    */
+
+    
+    //Terceiro Teste
+    mysql.getConnection((error, conn) => {
+        if (error) { return res.status(500).send({ error: error }) }
+        conn.query(
+            'UPDATE clientes SET Nome = ?, CPF = ? WHERE ID = ?;',
+            [req.body.nome, req.body.cpf, req.body.id_usuario],
+            (error, resultado, fields) => {
+                conn.release();
+                if (error) {
+                    return res.status(500).send({
+                        error: error,
+                        response: null
+                    });
+                }
+
+                const response = {
+                    usuario: {
+                        id_usuario: req.body.id_usuario,
+                        nome: req.body.nome,
+                        cpf: req.body.cpf,
+                        request: {
+                            tipo: 'GET',
+                            descriacao: 'Usuário atualizado com sucesso.',
+                            url: 'http://localhost:3000/usuarios/' + req.body.id_usuario
+                        }
+                    }
+                }
+                return res.status(202).send(response);
+
+            }
+        )
+    });
 });
 
 //DELETANDO UM USUÁRIOS
 router.delete('/', (req, res, next) => {
+
     /*
+    //Primeiro Teste
     res.status(201).send({
         mensagem: 'Usando o DELETE dentro da rota usuário'
     })
     */
+   /*
+   //Segundo Teste
     mysql.getConnection((error, conn) => {
         if (error) { return res.status(500).send({ error: error }) }
         conn.query(
@@ -137,6 +285,40 @@ router.delete('/', (req, res, next) => {
             }
         )
     });
+    */
+
+    //Terceiro Teste
+    mysql.getConnection((error, conn) => {
+        if (error) { return res.status(500).send({ error: error }) }
+        conn.query(
+            'DELETE FROM clientes WHERE ID = ?;',
+            [req.body.id_usuario],
+            (error, resultado, fields) => {
+                conn.release();
+                if (error) {
+                    return res.status(500).send({
+                        error: error,
+                        response: null
+                    });
+                }
+                
+                const response = {
+                    mensagem: 'Produto removido com sucesso.',
+                    request: {
+                            tipo: 'POST',
+                            descriacao: 'Deleta um usuário',
+                            url: 'http://localhost:3000/usuarios/',
+                            body: {
+                                nome: 'string',
+                                cpf: 'number'
+                            }
+                        }
+                }
+                return res.status(202).send( response );
+            }
+        )
+    });
+    
 });
 
 
