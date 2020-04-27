@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mysql = require('../mysql').pool;
 
 
 //RETORNA TODOS OS USUÁRIOS
@@ -11,14 +12,33 @@ router.get('/', (req, res, next) =>{
 
 //INSERE UM USUÁRIO
 router.post('/', (req, res, next) => {
-    const usuario = {
+    /*const usuario = {
         nome: req.body.nome,
         email: req.body.email
-    };
-    res.status(201).send({
-        mensagem: 'Usando o POST dentro da rota usuário',
-        usuarioCriado: usuario
+    };*/
+
+    //INSERINDO UM USUÁRIO NO BANCO
+    mysql.getConnection((error, conn) =>{
+        if(error){ return res.status(500).send({ error: error })}
+        conn.query(
+            'INSERT INTO clientes (Nome, CPF) VALUES (?,?)',
+            [req.body.nome, req.body.cpf],
+            (error, resultado, field) =>{
+                conn.release();
+                if(error){
+                    return res.status(500).send({
+                        error: error,
+                        response: null
+                    });
+                }
+                res.status(201).send({
+                    mensagem: 'Usuário inserido com sucesso',
+                    id_usuario: resultado.insertId
+                });
+            }
+            )
     });
+    
 });
 
 //RETORNA OS DADOS DE UM USUÁRIO
