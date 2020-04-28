@@ -126,8 +126,8 @@ router.post('/', (upload.single('usuario_imagem')), (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if (error) { return res.status(500).send({ error: error }) }
         conn.query(
-            'INSERT INTO clientes (Nome, CPF) VALUES (?,?)',
-            [req.body.nome, req.body.cpf],
+            'INSERT INTO clientes (Nome, CPF, imagem_usuario) VALUES (?,?,?)',
+            [req.body.nome, req.body.cpf, req.file.path],
             (error, resultado, field) => {
                 conn.release();
                 if (error) {
