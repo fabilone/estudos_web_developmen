@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 const rotaProdutos = require('./routes/usuarios');
 const rotaCidades = require('./routes/cidade');
+const rotaCadastro = require('./routes/cadastro');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false})); //apenas para dados simples
@@ -24,10 +25,11 @@ app.use((req, res, next) => {
 
 app.use('/usuarios', rotaProdutos);
 app.use('/cidades', rotaCidades);
+app.use('/cadastro', rotaCadastro);
 
 //QUANDO NÃO ENCONTRA ROTA
 app.use((req, res, next) => {
-    const erro = new Error('Não encontrado');
+    const erro = new Error('Rota não encontrada');
     erro.status = 404;
     next(erro);
 });

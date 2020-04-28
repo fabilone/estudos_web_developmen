@@ -139,12 +139,13 @@ router.post('/', (upload.single('usuario_imagem')), (req, res, next) => {
                 const response = {
                     mensagem: 'Usuario inserido com sucesso!',
                     usuario: {
-                        id_usuario: resultado.ID,
-                        nome: resultado.Nome,
-                        cpf: resultado.CPF,
+                        id_usuario: resultado.id_usuario,
+                        nome: req.body.nome,
+                        cpf: req.body.cpf,
+                        imagem_usuario: req.file.path,
                         request:{
                             tipo: 'GET',
-                            descriacao: 'Insere um usuario',
+                            descriacao: 'Usuário Inserido com Sucesso',
                             url: 'http://localhost:3000/usuarios'
                         }
                     }
